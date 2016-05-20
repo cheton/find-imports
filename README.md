@@ -8,10 +8,7 @@ var _ = require('lodash');
 var webpack = require('webpack');
 var findImports = require('find-imports');
 
-var files = [
-    'src/**/*.{js,jsx}'
-];
-var deps = _(findImports(files))
+var deps = _(findImports('src/**/*.{js,jsx}'))
     .toArray()
     .flatten()
     .uniq()

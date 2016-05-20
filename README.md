@@ -29,7 +29,7 @@ module.exports = {
 ## Installation
 
 ```bash
-npm install --save find-imports
+npm install --save-dev find-imports
 ```
 
 ## Usage

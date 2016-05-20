@@ -68,6 +68,36 @@ test('Pass a list of glob patterns', (t) => {
     t.end();
 });
 
+test('Flatten output', (t) => {
+    const result = findImports('test/fixtures/app.js', { flatten: true });
+    const wanted = [
+        'lodash',
+        'fs',
+        'path',
+        'express',
+        'consolidate',
+        'errorhandler',
+        'serve-favicon',
+        'cookie-parser',
+        'body-parser',
+        'connect-multiparty',
+        'connect-restreamer',
+        'method-override',
+        'morgan',
+        'compression',
+        'serve-static',
+        'express-session',
+        'session-file-store',
+        'i18next',
+        'i18next-node-fs-backend',
+        'del',
+        'i18next-express-middleware',
+        'hogan.js'
+    ];
+    t.same(result, wanted);
+    t.end();
+});
+
 test('Relative imports', (t) => {
     const files = [
         'test/fixtures/relative-imports.js',

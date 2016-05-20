@@ -1,11 +1,14 @@
+var _ = require('lodash');
 var babel = require('babel-core');
 var esprima = require('esprima');
 var glob = require('glob');
+var lodash = require('lodash');
 
-// @params {string|array} patterns The glob pattern or a list of glob patterns
-// @params {object} options The options object
-// @params {boolean} [options.absoluteImports] True to return absolute imports, defaults to false
-// @params {boolean} [options.relativeImports] True to return relative imports, defaults to false
+// @params {string|array} patterns The glob pattern or a list of glob patterns.
+// @params {object} options The options object.
+// @params {boolean} [options.flatten] True to flatten the output, defaults to false.
+// @params {boolean} [options.absoluteImports] True to return absolute imports, defaults to false.
+// @params {boolean} [options.relativeImports] True to return relative imports, defaults to false.
 var findImports = function(patterns, options) {
     var requiredModules = {};
     var filenames = [];
@@ -65,6 +68,14 @@ var findImports = function(patterns, options) {
             console.error('Error in `' + filename + '`: ' + e);
         }
     });
+
+    if (options.flatten) {
+        requiredModules = _(requiredModules)
+            .toArray()
+            .flatten()
+            .uniq()
+            .value();
+    }
 
     return requiredModules;
 };

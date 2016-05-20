@@ -8,20 +8,13 @@ var _ = require('lodash');
 var webpack = require('webpack');
 var findImports = require('find-imports');
 
-var deps = _(findImports('src/**/*.{js,jsx}'))
-    .toArray()
-    .flatten()
-    .uniq()
-    .sort()
-    .value();
-
 // Webpack Configuration
 module.exports = {
     entry: {
         app: [
             './src/index.js'
         ],
-        vendor: deps
+        vendor: findImports('src/**/*.{js,jsx}', { flatten: true })
     },
     output: {
         path: path.join(__dirname, 'dist'),
@@ -49,7 +42,7 @@ const files = [
 ];
 
 findImports(files);
-// → { 'src/web/index.jsx':
+// → { 'src/index.jsx':
 //     [ 'lodash',
 //       'async',
 //       'jsuri',
@@ -58,13 +51,25 @@ findImports(files);
 //       'react-router' ] }
 ```
 
+To flatten the output:
+```js
+findImports(files, { flatten: true });
+// → [ 'lodash',
+//     'async',
+//     'jsuri',
+//     'react',
+//     'react-dom',
+//     'react-router' ]
+
+```
+
 To return absolute and relative imports:
 ```js
 findImports(files, {
     absoluteImports: true,
     relativeImports, true
 });
-// → { 'src/web/index.jsx':
+// → { 'src/index.jsx':
 //     [ 'lodash',
 //       'async',
 //       'jsuri',

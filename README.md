@@ -6,6 +6,7 @@ Find all imported modules in JavaScript files. It's useful for bundling 3rd-part
 ```js
 var _ = require('lodash');
 var webpack = require('webpack');
+var findImports = require('find-imports');
 
 var files = [
     'src/**/*.{js,jsx}'

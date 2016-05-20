@@ -4,7 +4,6 @@
 Find all imported modules in JavaScript files. It's useful for bundling 3rd-party libraries into a vendor.js using webpack. For example:
 
 ```js
-var _ = require('lodash');
 var webpack = require('webpack');
 var findImports = require('find-imports');
 

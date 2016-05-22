@@ -5,19 +5,22 @@ var glob = require('glob');
 var lodash = require('lodash');
 
 var defaultOptions = {
-    packageImports: true
+    packageImports: true,
+    absoluteImports: false,
+    relativeImports: false
 };
 
 // @params {string|array} patterns The glob pattern or a list of glob patterns.
 // @params {object} options The options object.
 // @params {boolean} [options.flatten] True to flatten the output, defaults to false.
+// @params {boolean} [options.packageImports] True to return package imports, defaults to true.
 // @params {boolean} [options.absoluteImports] True to return absolute imports, defaults to false.
 // @params {boolean} [options.relativeImports] True to return relative imports, defaults to false.
 var findImports = function(patterns, options) {
     var requiredModules = {};
     var filenames = [];
 
-    var addModule = function (filename, value) {
+    var addModule = function(filename, value) {
         if (value[0] === '/') {
             if(!!options.absoluteImports) {
                 requiredModules[filename].push(value);
@@ -40,8 +43,7 @@ var findImports = function(patterns, options) {
     });
 
     // options
-    options = options || {};
-    options = Object.assign({},defaultOptions,options);
+    options = Object.assign({}, defaultOptions, options || {});
 
     filenames.forEach(function(filename) {
         try {

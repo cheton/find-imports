@@ -143,6 +143,74 @@ test('Absolute imports', (t) => {
     t.end();
 });
 
+
+test('Only package imports', (t) => {
+    const files = [
+        'test/fixtures/mock-imports.js'
+    ];
+    const result = findImports(files);
+    const wanted = {
+        'test/fixtures/mock-imports.js': [
+            'package1',
+            'package2',
+            'package3',
+            'package4/extras'
+        ]
+    };
+    t.same(result, wanted);
+    t.end();
+});
+
+
+test('No package imports', (t) => {
+    const files = [
+        'test/fixtures/mock-imports.js'
+    ];
+    const result = findImports(files, {packageImports:false});
+    const wanted = {
+        'test/fixtures/mock-imports.js': [
+        ]
+    };
+    t.same(result, wanted);
+    t.end();
+});
+
+
+test('Only absolute imports', (t) => {
+    const files = [
+        'test/fixtures/mock-imports.js'
+    ];
+    const result = findImports(files, {absoluteImports:true, packageImports:false});
+    const wanted = {
+        'test/fixtures/mock-imports.js': [
+            '/absolute1',
+            '/absolute2',
+            '/absolute3',
+            '/absolute4/extras'
+        ]
+    };
+    t.same(result, wanted);
+    t.end();
+});
+
+
+test('Only relative imports', (t) => {
+    const files = [
+        'test/fixtures/mock-imports.js'
+    ];
+    const result = findImports(files, {relativeImports:true, packageImports:false});
+    const wanted = {
+        'test/fixtures/mock-imports.js': [
+            './relative1',
+            './relative2',
+            './relative3',
+            './relative4/extras'
+        ]
+    };
+    t.same(result, wanted);
+    t.end();
+});
+
 test('Syntax errors', (t) => {
     const result = findImports('test/fixtures/syntax-errors.js');
     const wanted = {};

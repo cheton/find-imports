@@ -32,6 +32,7 @@ npm install --save-dev find-imports
 ```
 
 ## Usage
+The default options only return package imports:
 ```js
 import findImports from 'find-imports';
 
@@ -90,6 +91,37 @@ findImports(files, {
 //     [ '/index.styl',
 //       './index.css' ] }
 ```
+
+## Options
+Below are the options with their default values:
+```js
+{
+    flatten: false,
+    packageImports: true,
+    absoluteImports: false,
+    relativeImports: false
+}
+```
+
+### flatten
+Type: `Boolean` Default: <i>false</i>
+
+Sets <i>true</i> to flatten the output and filter duplicate ones.
+
+### packageImports
+Type: `Boolean` Default: <i>true</i>
+
+Sets <i>true</i> to return package imports.
+
+### absoluteImports
+Type: `Boolean` Default: <i>false</i>
+
+Sets <i>true</i> to return absolute imports.
+
+### relativeImports
+Type: `Boolean` Default: <i>false</i>
+
+Sets <i>false</i> to return relative imports.
 
 ## License
 

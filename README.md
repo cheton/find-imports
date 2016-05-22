@@ -66,7 +66,7 @@ To return absolute and relative imports:
 ```js
 findImports(files, {
     absoluteImports: true,
-    relativeImports, true
+    relativeImports: true
 });
 // → { 'src/index.jsx':
 //     [ 'lodash',
@@ -76,6 +76,18 @@ findImports(files, {
 //       'react-dom',
 //       'react-router',
 //       '/index.styl',
+//       './index.css' ] }
+```
+
+To only return absolute and relative imports (no packages):
+```js
+findImports(files, {
+    absoluteImports: true,
+    relativeImports: true,
+    packageImports: false
+});
+// → { 'src/index.jsx':
+//     [ '/index.styl',
 //       './index.css' ] }
 ```
 

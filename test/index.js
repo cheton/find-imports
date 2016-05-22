@@ -166,7 +166,7 @@ test('No package imports', (t) => {
     const files = [
         'test/fixtures/mock-imports.js'
     ];
-    const result = findImports(files, {packageImports:false});
+    const result = findImports(files, { packageImports: false });
     const wanted = {
         'test/fixtures/mock-imports.js': [
         ]
@@ -180,7 +180,7 @@ test('Only absolute imports', (t) => {
     const files = [
         'test/fixtures/mock-imports.js'
     ];
-    const result = findImports(files, {absoluteImports:true, packageImports:false});
+    const result = findImports(files, { absoluteImports: true, packageImports: false });
     const wanted = {
         'test/fixtures/mock-imports.js': [
             '/absolute1',
@@ -198,7 +198,7 @@ test('Only relative imports', (t) => {
     const files = [
         'test/fixtures/mock-imports.js'
     ];
-    const result = findImports(files, {relativeImports:true, packageImports:false});
+    const result = findImports(files, { relativeImports: true, packageImports: false });
     const wanted = {
         'test/fixtures/mock-imports.js': [
             './relative1',

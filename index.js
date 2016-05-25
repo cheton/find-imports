@@ -1,8 +1,10 @@
+var fs = require('fs');
+var path = require('path');
 var _ = require('lodash');
 var babel = require('babel-core');
 var esprima = require('esprima');
 var glob = require('glob');
-var lodash = require('lodash');
+var resolveGlob = require('./resolve-glob');
 
 var defaultOptions = {
     packageImports: true,
@@ -18,40 +20,57 @@ var defaultOptions = {
 // @params {boolean} [options.relativeImports] True to return relative imports, defaults to false.
 var findImports = function(patterns, options) {
     var requiredModules = {};
-    var filenames = [];
-
-    var addModule = function(filename, value) {
+    var filepaths = [];
+    var addModule = function(modulePath, value) {
         if (value[0] === '/') {
-            if(!!options.absoluteImports) {
-                requiredModules[filename].push(value);
+            if (!!options.absoluteImports) {
+                requiredModules[modulePath].push(value);
             }
-        }
-        else if (value[0] === '.'){
-            if(!!options.relativeImports) {
-                requiredModules[filename].push(value);
+        } else if (value[0] === '.') {
+            if (!!options.relativeImports) {
+                requiredModules[modulePath].push(value);
             }
-        }
-        else if (!!options.packageImports) {
-            requiredModules[filename].push(value);
+        } else if (!!options.packageImports) {
+            requiredModules[modulePath].push(value);
         }
     };
-
-    // patterns
-    patterns = [].concat(patterns || []);
-    patterns.forEach(function(pattern) {
-        filenames = filenames.concat(glob.sync(pattern));
-    });
 
     // options
     options = Object.assign({}, defaultOptions, options || {});
 
-    filenames.forEach(function(filename) {
+    { // glob patterns
+        var positives = [];
+        var negatives = [];
+
+        patterns = [].concat(patterns || []);
+        patterns.forEach(function(pattern) {
+            // Make a glob pattern absolute
+            pattern = resolveGlob(pattern);
+
+            if (pattern.charAt(0) === '!') {
+                negatives = negatives.concat(glob.sync(pattern.slice(1)));
+            } else {
+                positives = positives.concat(glob.sync(pattern));
+            }
+        });
+
+        filepaths = _.difference(positives, negatives);
+    }
+
+    filepaths.forEach(function(filepath) {
+        var stat = fs.statSync(filepath);
+        if (!stat.isFile()) {
+            return;
+        }
+
         try {
-            var result = babel.transformFileSync(filename);
+            var result = babel.transformFileSync(filepath);
             var tree = esprima.parse(result.code, {
                 sourceType: 'module'
             });
-            requiredModules[filename] = [];
+            var modulePath = path.relative(process.cwd(), filepath);
+
+            requiredModules[modulePath] = [];
 
             tree.body.forEach(function(node) {
                 if (node.type === 'ExpressionStatement') {
@@ -60,7 +79,7 @@ var findImports = function(patterns, options) {
                         return;
                     }
 
-                    addModule(filename, node.expression.arguments[0].value);
+                    addModule(modulePath, node.expression.arguments[0].value);
                 } else if (node.type === 'VariableDeclaration') {
                     node.declarations.forEach(function(decl) {
                         if (!decl.init ||
@@ -69,12 +88,12 @@ var findImports = function(patterns, options) {
                             return;
                         }
 
-                        addModule(filename, decl.init.arguments[0].value);
+                        addModule(modulePath, decl.init.arguments[0].value);
                     });
                 }
             });
         } catch (e) {
-            console.error('Error in `' + filename + '`: ' + e);
+            console.error('Error in `' + modulePath + '`: ' + e);
         }
     });
 

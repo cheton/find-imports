@@ -7,7 +7,7 @@
   "scripts": {
     "prepublish": "npm run eslint && npm test",
     "test": "./babel-tap --coverage test/*.js",
-    "eslint": "eslint index.js"
+    "eslint": "eslint *.js"
   },
   "author": "Cheton Wu <cheton@gmail.com>",
   "license": "MIT",
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
+    "babel-eslint": "^6.0.4",
     "coveralls": "^2.11.9",
     "eslint": "^2.10.2",
     "tap": "^5.7.1"

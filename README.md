@@ -38,7 +38,10 @@ import findImports from 'find-imports';
 
 const files = [
     // glob pattern
-    'src/**/*.{js,jsx}'
+    'src/**/*.{js,jsx}',
+
+    // use negative glob pattern to exclude files
+    '!src/**/*.spec.js'
 ];
 
 findImports(files);

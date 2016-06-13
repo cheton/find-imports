@@ -6,8 +6,9 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "npm run eslint && npm test",
+    "eslint": "eslint *.js",
     "test": "./babel-tap --coverage test/*.js",
-    "eslint": "eslint *.js"
+    "coveralls": "./babel-tap --coverage --coverage-report=text-lcov test/*.js | node_modules/.bin/coveralls"
   },
   "author": "Cheton Wu <cheton@gmail.com>",
   "license": "MIT",

@@ -1,6 +1,6 @@
 # find-imports [![build status](https://travis-ci.org/cheton/find-imports.svg?branch=master)](https://travis-ci.org/cheton/find-imports) [![Coverage Status](https://coveralls.io/repos/github/cheton/find-imports/badge.svg?branch=master)](https://coveralls.io/github/cheton/find-imports?branch=master)
 
-[![NPM](https://nodei.co/npm/find-imports.png?downloads=true&stars=true)](https://nodei.co/npm/find-imports/)
+[![NPM](https://nodei.co/npm/find-imports.png?downloads=true&stars=true)](https://www.npmjs.com/package/find-imports)
 
 Find all imported modules in JavaScript files. It's useful for bundling 3rd-party libraries into a vendor.js using webpack. For example:
 

@@ -1,6 +1,6 @@
 {
   "name": "find-imports",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Find all imported modules in JavaScript files.",
   "homepage": "https://github.com/cheton/find-imports",
   "main": "index.js",

@@ -73,14 +73,23 @@ var findImports = function(patterns, options) {
             requiredModules[modulePath] = [];
 
             tree.body.forEach(function(node) {
-                if (node.type === 'ExpressionStatement') {
-                    if (node.expression.type !== 'CallExpression' ||
-                        node.expression.callee.name !== 'require') {
-                        return;
-                    }
+                if (node.type === 'ExpressionStatement' &&
+                    node.expression.type === 'CallExpression' &&
+                    node.expression.callee.type === 'MemberExpression' &&
+                    node.expression.callee.object.type === 'CallExpression' &&
+                    node.expression.callee.object.callee.name === 'require') {
+                    addModule(modulePath, node.expression.callee.object.arguments[0].value);
+                    return;
+                }
 
+                if (node.type === 'ExpressionStatement' &&
+                    node.expression.type === 'CallExpression' &&
+                    node.expression.callee.name === 'require') {
                     addModule(modulePath, node.expression.arguments[0].value);
-                } else if (node.type === 'VariableDeclaration') {
+                    return;
+                }
+
+                if (node.type === 'VariableDeclaration') {
                     node.declarations.forEach(function(decl) {
                         if (!decl.init ||
                             decl.init.type !== 'CallExpression' ||
@@ -90,6 +99,7 @@ var findImports = function(patterns, options) {
 
                         addModule(modulePath, decl.init.arguments[0].value);
                     });
+                    return;
                 }
             });
         } catch (e) {

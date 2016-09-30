@@ -11,6 +11,32 @@ test('should skip directory in glob pattern', (t) => {
     t.end();
 });
 
+test('polyfill', (t) => {
+    const result = findImports('test/fixtures/polyfill.js');
+    const wanted = {
+        'test/fixtures/polyfill.js': [
+            'es5-shim/es5-shim',
+            'es5-shim/es5-sham',
+            'es6-shim/es6-shim',
+            'es6-shim/es6-sham',
+            'es6-symbol/implement',
+            'es7-shim/es7-shim',
+            'imports?this=>window!js-polyfills/cssom',
+            'imports?self=>window!js-polyfills/dom',
+            'imports?self=>window!js-polyfills/fetch',
+            'imports?self=>window!js-polyfills/html',
+            'imports?self=>window!js-polyfills/keyboard',
+            'imports?this=>window!js-polyfills/timing',
+            'imports?self=>window!js-polyfills/typedarray',
+            'imports?self=>window!js-polyfills/url',
+            'imports?self=>window!js-polyfills/web',
+            'imports?self=>window!js-polyfills/xhr'
+        ]
+    };
+    t.same(result, wanted);
+    t.end();
+});
+
 test('single glob pattern', (t) => {
     const result = findImports('test/fixtures/app.js');
     const wanted = {

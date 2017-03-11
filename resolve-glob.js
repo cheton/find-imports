@@ -1,9 +1,12 @@
+/* eslint no-ternary: 0 */
 var path = require('path');
 
 // Make a glob pattern absolute
 module.exports = function(glob, options) {
     options = Object.create({}, options);
-    options.base = options.base ? path.resolve(options.base) : process.cwd();
+    options.base = options.base
+        ? path.resolve(options.base)
+        : process.cwd();
 
     // Store first and last characters before glob is modified
     var prefix = glob.charAt(0);
@@ -22,5 +25,7 @@ module.exports = function(glob, options) {
         glob += '/';
     }
 
-    return isNegative ? '!' + glob : glob;
+    return isNegative
+        ? '!' + glob
+        : glob;
 };

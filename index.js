@@ -1,3 +1,5 @@
+/* eslint no-console: 0 */
+/* eslint no-extra-boolean-cast: 0 */
 var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');

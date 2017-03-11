@@ -101,6 +101,11 @@ var findImports = function(patterns, options) {
                     });
                     return;
                 }
+
+                if (node.type === 'ImportDeclaration') {
+                    addModule(modulePath, node.source.value);
+                    return;
+                }
             });
         } catch (e) {
             console.error('Error in `' + modulePath + '`: ' + e);

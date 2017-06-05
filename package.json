@@ -7,8 +7,8 @@
   "scripts": {
     "prepublish": "npm run eslint && npm test",
     "eslint": "eslint *.js",
-    "test": "./babel-tap --coverage test/*.js",
-    "coveralls": "./babel-tap --coverage --coverage-report=text-lcov test/*.js | node_modules/.bin/coveralls"
+    "test": "tap test/*.js --coverage --nyc-arg=--require --nyc-arg=babel-register --nyc-arg=--require --nyc-arg=babel-polyfill",
+    "coveralls": "tap test/*.js --coverage --coverage-report=text-lcov --nyc-arg=--require --nyc-arg=babel-register --nyc-arg=--require --nyc-arg=babel-polyfill | coveralls"
   },
   "author": "Cheton Wu <cheton@gmail.com>",
   "license": "MIT",
@@ -28,7 +28,7 @@
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-eslint": "^7.1.1",
-    "coveralls": "^2.12.0",
+    "coveralls": "tap test/*.js --coverage --coverage-report=text-lcov --nyc-arg=--require --nyc-arg=babel-register --nyc-arg=--require --nyc-arg=babel-polyfill | coveralls",
     "eslint": "^3.17.1",
     "tap": "^10.3.0"
   },

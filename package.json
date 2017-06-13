@@ -7,7 +7,7 @@
   "scripts": {
     "prepublish": "npm run eslint && npm test",
     "eslint": "eslint *.js",
-    "test": "tap test/*.js --coverage --nyc-arg=--require --nyc-arg=babel-register --nyc-arg=--require --nyc-arg=babel-polyfill",
+    "test": "tap test/*.js --node-arg=--require --node-arg=babel-register --node-arg=--require --node-arg=babel-polyfill",
     "coveralls": "tap test/*.js --coverage --coverage-report=text-lcov --nyc-arg=--require --nyc-arg=babel-register --nyc-arg=--require --nyc-arg=babel-polyfill | coveralls"
   },
   "author": "Cheton Wu <cheton@gmail.com>",

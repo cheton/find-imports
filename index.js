@@ -1,9 +1,15 @@
 /* eslint no-console: 0 */
 /* eslint no-extra-boolean-cast: 0 */
+/* eslint no-underscore-dangle: 0 */
 var fs = require('fs');
 var path = require('path');
-var _ = require('lodash');
-var babel = require('babel-core');
+var ensureArray = require('ensure-array');
+var _get = require('lodash/get');
+var _difference = require('lodash/difference');
+var _values = require('lodash/values');
+var _uniq = require('lodash/uniq');
+var _flatten = require('lodash/flatten');
+var babel = require('@babel/core');
 var esprima = require('esprima');
 var glob = require('glob');
 var resolveGlob = require('./resolve-glob');
@@ -36,6 +42,14 @@ var findImports = function(patterns, options) {
             requiredModules[modulePath].push(value);
         }
     };
+    var isRequireExpression = function(o) {
+        return (
+            _get(o, 'type') === 'CallExpression' &&
+            _get(o, 'callee.type') === 'Identifier' &&
+            _get(o, 'callee.name') === 'require' &&
+            _get(o, 'arguments[0].type') === 'Literal'
+        );
+    };
 
     // options
     options = Object.assign({}, defaultOptions, options || {});
@@ -56,7 +70,7 @@ var findImports = function(patterns, options) {
             }
         });
 
-        filepaths = _.difference(positives, negatives);
+        filepaths = _difference(positives, negatives);
     }
 
     filepaths.forEach(function(filepath) {
@@ -93,13 +107,18 @@ var findImports = function(patterns, options) {
 
                 if (node.type === 'VariableDeclaration') {
                     node.declarations.forEach(function(decl) {
-                        if (!decl.init ||
-                            decl.init.type !== 'CallExpression' ||
-                            decl.init.callee.name !== 'require') {
+                        var expr = decl.init;
+                        if (isRequireExpression(expr)) {
+                            addModule(modulePath, _get(expr, 'arguments[0].value'));
                             return;
                         }
 
-                        addModule(modulePath, decl.init.arguments[0].value);
+                        var exprArguments = ensureArray(_get(decl, 'init.arguments'));
+                        exprArguments.forEach(function(exprArgument) {
+                            if (isRequireExpression(exprArgument)) {
+                                addModule(modulePath, _get(exprArgument, 'arguments[0].value'));
+                            }
+                        });
                     });
                     return;
                 }
@@ -115,11 +134,7 @@ var findImports = function(patterns, options) {
     });
 
     if (options.flatten) {
-        requiredModules = _(requiredModules)
-            .toArray()
-            .flatten()
-            .uniq()
-            .value();
+        requiredModules = _uniq(_flatten(_values(requiredModules)));
     }
 
     return requiredModules;

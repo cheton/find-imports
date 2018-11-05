@@ -14,6 +14,13 @@ var esprima = require('esprima');
 var glob = require('glob');
 var resolveGlob = require('./resolve-glob');
 
+var babelOptions = {};
+try {
+    babelOptions = JSON.parse(fs.readFileSync('.babelrc', 'utf-8'));
+} catch (e) {
+    // No custom babel configuration found - using defaults
+}
+
 var defaultOptions = {
     packageImports: true,
     absoluteImports: false,
@@ -80,7 +87,7 @@ var findImports = function(patterns, options) {
         }
 
         try {
-            var result = babel.transformFileSync(filepath);
+            var result = babel.transformFileSync(filepath, babelOptions);
             var tree = esprima.parse(result.code, {
                 sourceType: 'module'
             });

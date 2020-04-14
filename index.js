@@ -14,9 +14,9 @@ var esprima = require('esprima');
 var glob = require('glob');
 var resolveGlob = require('./resolve-glob');
 
-var babelOptions = {};
+var babelOptions = { caller: { name: 'find-imports' } };
 try {
-    babelOptions = JSON.parse(fs.readFileSync('.babelrc', 'utf-8'));
+    Object.assign(babelOptions, JSON.parse(fs.readFileSync('.babelrc', 'utf-8')));
 } catch (e) {
     // No custom babel configuration found - using defaults
 }

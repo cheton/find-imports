@@ -14,7 +14,7 @@ var esprima = require('esprima');
 var glob = require('glob');
 var resolveGlob = require('./resolve-glob');
 
-var babelOptions = { caller: { name: 'find-imports' } };
+var babelOptions = {caller: {name: 'find-imports'}};
 try {
     Object.assign(babelOptions, JSON.parse(fs.readFileSync('.babelrc', 'utf-8')));
 } catch (e) {
